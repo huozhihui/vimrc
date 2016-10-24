@@ -55,7 +55,7 @@ class InstallPlugin():
         self.vim_path = '%s/.vim' % user_home
         self.bundle = '%s/bundle' % self.vim_path
         '''
-        self.plugins = {
+        self.pluginsa = {
             'html5.vim': 'https://github.com/othree/html5.vim.git',
             'ctrlp.vim': 'https://github.com/kien/ctrlp.vim.git',
             'nerdtree': 'https://github.com/scrooloose/nerdtree.git',
@@ -71,10 +71,8 @@ class InstallPlugin():
             'vim-rake': 'https://github.com/tpope/vim-rake.git',
             'vim-rspec': 'https://github.com/thoughtbot/vim-rspec.git',
             'vim-ruby': 'https://github.com/vim-ruby/vim-ruby.git'
-
-
         }
-'''
+        '''
     def main(self):
         if not os.path.exists(self.vim_path):
             print "Create %s directory" % self.vim_path
@@ -133,7 +131,6 @@ class InstallPlugin():
 
     # 获取插件列表
     def plugins(self):
-        return self.__setting().sections()
         d = {}
         for tag in self.__setting().sections():
             d[tag] = self.__plugin_info(tag, 'path')
