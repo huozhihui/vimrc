@@ -52,7 +52,8 @@ class VimRc():
 class InstallPlugin():
     def __init__(self):
         user_home = os.environ['HOME']
-        self.bundle = '%s/.vim/bundle' % user_home
+        self.vim_path = '%s/.vim' % user_home
+        self.bundle = '%s/bundle' % self.vim_path
         '''
         self.plugins = {
             'html5.vim': 'https://github.com/othree/html5.vim.git',
@@ -75,6 +76,9 @@ class InstallPlugin():
         }
 '''
     def main(self):
+        if not os.path.exists(self.vim_path):
+            print "Create %s directory" % self.vim_path
+            os.mkdir(self.vim_path)
         if not os.path.exists(self.bundle):
             print "Create %s directory" % self.bundle
             os.mkdir(self.bundle)
@@ -130,6 +134,10 @@ class InstallPlugin():
     # 获取插件列表
     def plugins(self):
         return self.__setting().sections()
+        d = {}
+        for tag in self.__setting().sections():
+            d[tag] = self.__plugin_info(tag, 'path')
+        return d
 
     # 获取插件信息
     def __plugin_info(self, pn, key):
@@ -141,12 +149,8 @@ class InstallPlugin():
         config.read('setting.ini')
         return config
 
-
-
-
 if __name__ == '__main__':
    # v = VimRc()
    # v.set_vimrc()
     p = InstallPlugin()
-    #p.main()
-    p.get_setting()
+    p.main()
