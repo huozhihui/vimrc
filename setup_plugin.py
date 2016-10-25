@@ -54,6 +54,7 @@ class InstallPlugin():
         user_home = os.environ['HOME']
         self.vim_path = '%s/.vim' % user_home
         self.bundle = '%s/bundle' % self.vim_path
+        self.plugins = {}
         '''
         self.pluginsa = {
             'html5.vim': 'https://github.com/othree/html5.vim.git',
@@ -80,11 +81,11 @@ class InstallPlugin():
         if not os.path.exists(self.bundle):
             print "Create %s directory" % self.bundle
             os.mkdir(self.bundle)
-        os.chdir(self.bundle)
         print "Plugins List".center(100, '=')
         print "No".center(10) + "Name".ljust(40) + "Url"
         count = 1
-        for k, v in self.plugins().iteritems():
+        self.set_plugins()
+        for k, v in self.plugins.iteritems():
             print str(count).center(10) + k.ljust(40) + v
             count += 1
 
@@ -95,11 +96,12 @@ class InstallPlugin():
         print '    3) Select not install plugins'
         print '\r'
 
+        os.chdir(self.bundle)
         while True:
             way = raw_input('Please install way(1/2/3):')
             if way == '1':
                 print "install all"
-                self.install_plugin(self.plugins())
+                self.install_plugin(self.plugins)
                 break
             elif way == '2':
                 print "select install"
@@ -130,11 +132,9 @@ class InstallPlugin():
             print 'Plugin %s Install Timeout' % pn
 
     # 获取插件列表
-    def plugins(self):
-        d = {}
+    def set_plugins(self):
         for tag in self.__setting().sections():
-            d[tag] = self.__plugin_info(tag, 'path')
-        return d
+            self.plugins[tag] = self.__plugin_info(tag, 'path')
 
     # 获取插件信息
     def __plugin_info(self, pn, key):
@@ -147,7 +147,7 @@ class InstallPlugin():
         return config
 
 if __name__ == '__main__':
-   # v = VimRc()
-   # v.set_vimrc()
+    # v = VimRc()
+    # v.set_vimrc()
     p = InstallPlugin()
     p.main()
